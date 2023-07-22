@@ -1,3 +1,12 @@
+using Microservice.Services.Catalog.Services.Abstract;
+using Microservice.Services.Catalog.Services.Concrete;
+using Microservice.Services.Catalog.Settings.Abstract;
+using Microservice.Services.Catalog.Settings.Concrete;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
+using MongoDB.Driver;
+
 namespace Microservice.Services.Catalog
 {
     public class Program
@@ -7,6 +16,17 @@ namespace Microservice.Services.Catalog
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+
+            builder.Services.AddScoped<ICategoryService, CategoryService>();
+            builder.Services.AddScoped<IProductService, ProductService>();
+
+            builder.Services.AddAutoMapper(typeof(Program));
+
+            builder.Services.Configure<DatabaseSettings>(builder.Configuration.GetSection("DatabaseSettings"));
+            builder.Services.AddSingleton<IDatabaseSettings>(sp =>
+            {
+                return sp.GetRequiredService<IOptions<DatabaseSettings>>().Value;
+            });
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
