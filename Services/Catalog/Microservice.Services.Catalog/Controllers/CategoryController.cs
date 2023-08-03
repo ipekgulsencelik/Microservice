@@ -7,7 +7,7 @@ namespace Microservice.Services.Catalog.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CategoryController : ControllerBase
+    public class CategoryController : CustomBaseController
     {
         private readonly ICategoryService _categoryService;
 
